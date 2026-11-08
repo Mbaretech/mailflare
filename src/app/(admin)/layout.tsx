@@ -8,6 +8,7 @@ import { AuthGuard } from "@/components/auth/auth-guard";
 import { ComposeProvider } from "@/components/compose/compose-context";
 import { FloatingComposer } from "@/components/compose/floating-composer";
 import { MailboxProvider } from "@/components/mailbox-provider";
+import { MailSearchProvider } from "@/components/mail-search/mail-search-context";
 import { MailboxSelector } from "@/components/mailbox-selector";
 import { LicenseIndicator } from "@/components/license-indicator";
 import { AdminNav } from "@/components/admin-nav";
@@ -52,31 +53,33 @@ export default function DashboardLayout({
     <AuthGuard requireMailbox requireRole="admin" requirePrimary={requirePrimary}>
       <SidebarProvider expandedWidth={256} mobileOverlay>
       <MailboxProvider>
-        <ComposeProvider>
-          <ShortcutsProvider>
-            <RouteTitle />
-          <div className="grid h-dvh grid-cols-[minmax(0,1fr)] md:grid-cols-[var(--sidebar-width)_minmax(0,1fr)] overflow-hidden bg-[#f6f8fc] transition-[grid-template-columns]" style={{ transitionDuration: "var(--sidebar-transition-duration)" }}>
-            <SkipToContent />
-            <SidebarAside>
-              <div className="h-full">
-                <AdminNav />
+        <MailSearchProvider>
+          <ComposeProvider>
+            <ShortcutsProvider>
+              <RouteTitle />
+            <div className="grid h-dvh grid-cols-[minmax(0,1fr)] md:grid-cols-[var(--sidebar-width)_minmax(0,1fr)] overflow-hidden bg-[#f6f8fc] transition-[grid-template-columns]" style={{ transitionDuration: "var(--sidebar-transition-duration)" }}>
+              <SkipToContent />
+              <SidebarAside>
+                <div className="h-full">
+                  <AdminNav />
+                </div>
+                <SidebarResizeBoundary />
+              </SidebarAside>
+              <div className="flex min-h-0 min-w-0 flex-col">
+                              <MobileTopBar title={mobileTitle} />
+                <header className="fixed top-2 right-4 flex items-center gap-4 z-90">
+                  <LicenseIndicator />
+                  <MailboxSelector />
+                </header>
+                <main id="main-content" tabIndex={-1} className={clsx("focus:outline-none page-flush min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain rounded-tl-3xl max-md:rounded-t-3xl max-md:bg-white max-md:pb-24 px-6 py-10 scrollbar-gutter-stable lg:px-12", mobileTitle && "max-md:[&_h1]:sr-only")}>
+                  <div className="w-full max-w-3xl">{children}</div>
+                </main>
               </div>
-              <SidebarResizeBoundary />
-            </SidebarAside>
-            <div className="flex min-h-0 min-w-0 flex-col">
-                            <MobileTopBar title={mobileTitle} />
-              <header className="fixed top-2 right-4 flex items-center gap-4 z-90">
-                <LicenseIndicator />
-                <MailboxSelector />
-              </header>
-              <main id="main-content" tabIndex={-1} className={clsx("focus:outline-none page-flush min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain rounded-tl-3xl max-md:rounded-t-3xl max-md:bg-white max-md:pb-24 px-6 py-10 scrollbar-gutter-stable lg:px-12", mobileTitle && "max-md:[&_h1]:sr-only")}>
-                <div className="w-full max-w-3xl">{children}</div>
-              </main>
+              <FloatingComposer />
             </div>
-            <FloatingComposer />
-          </div>
-          </ShortcutsProvider>
-        </ComposeProvider>
+            </ShortcutsProvider>
+          </ComposeProvider>
+        <MailSearchProvider>
       </MailboxProvider>
       </SidebarProvider>
     </AuthGuard>
