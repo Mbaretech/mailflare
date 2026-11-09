@@ -79,7 +79,7 @@ export default function DashboardLayout({
             </div>
             </ShortcutsProvider>
           </ComposeProvider>
-        <MailSearchProvider>
+        </MailSearchProvider>
       </MailboxProvider>
       </SidebarProvider>
     </AuthGuard>
